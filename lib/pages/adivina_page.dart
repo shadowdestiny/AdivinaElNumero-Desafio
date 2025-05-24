@@ -1,3 +1,4 @@
+
 import 'dart:math';
 import 'package:flutter/material.dart';
 import '../models/difficulty_config.dart';
@@ -48,7 +49,7 @@ class _AdivinaGamePageState extends State<AdivinaGamePage> {
     final config = difficultyLevels[_sliderValue.toInt()]!;
     _max = config['max'];
     _remainingTries = config['tries'];
-    _secretNumber = Random().nextInt(_max) + 1;
+    _secretNumber = 1 + Random().nextInt(_max);
     _greaterThan.clear();
     _lessThan.clear();
     _controller.clear();
@@ -72,7 +73,6 @@ class _AdivinaGamePageState extends State<AdivinaGamePage> {
         _history.add({'value': input, 'success': true});
         _saveHistory();
         _gameOver = true;
-        // reiniciar automáticamente luego de un pequeño retraso
         Future.delayed(const Duration(seconds: 2), () => _resetGame());
       } else {
         if (input > _secretNumber) {
@@ -119,6 +119,8 @@ class _AdivinaGamePageState extends State<AdivinaGamePage> {
                     controller: _controller,
                     enabled: !_gameOver,
                     keyboardType: TextInputType.number,
+                    textInputAction: TextInputAction.done,
+                    onSubmitted: (_) => _submitGuess(),
                     textAlign: TextAlign.center,
                     decoration: InputDecoration(
                       labelText: 'Número (1 - $_max)',
@@ -180,6 +182,21 @@ class _AdivinaGamePageState extends State<AdivinaGamePage> {
                   _resetGame();
                 });
               },
+            ),
+            const SizedBox(height: 8),
+            ElevatedButton.icon(
+              onPressed: () async {
+                await HistoryService.clearHistory();
+                setState(() {
+                  _history.clear();
+                });
+              },
+              icon: const Icon(Icons.delete),
+              label: const Text("Borrar historial"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.redAccent,
+                foregroundColor: Colors.white,
+              ),
             ),
           ],
         ),
