@@ -102,8 +102,7 @@ class _AdivinaGamePageState extends State<AdivinaGamePage> {
     });
   }
 
-  String get _currentLevelName =>
-      difficultyLevels[_sliderValue.toInt()]!['name'];
+  String get _currentLevelName => difficultyLevels[_sliderValue.toInt()]!['name'];
 
   @override
   Widget build(BuildContext context) {
@@ -120,8 +119,6 @@ class _AdivinaGamePageState extends State<AdivinaGamePage> {
                     controller: _controller,
                     enabled: !_gameOver,
                     keyboardType: TextInputType.number,
-                    textInputAction: TextInputAction.done,
-                    onSubmitted: (_) => _submitGuess(),
                     textAlign: TextAlign.center,
                     decoration: InputDecoration(
                       labelText: 'Número (1 - $_max)',
@@ -131,7 +128,10 @@ class _AdivinaGamePageState extends State<AdivinaGamePage> {
                 ),
                 const SizedBox(width: 16),
                 Column(
-                  children: [const Text("Intentos"), Text('$_remainingTries')],
+                  children: [
+                    const Text("Intentos"),
+                    Text('$_remainingTries'),
+                  ],
                 ),
               ],
             ),
