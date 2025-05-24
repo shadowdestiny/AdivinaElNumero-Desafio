@@ -1,3 +1,4 @@
+
 import 'dart:math';
 import 'package:flutter/material.dart';
 import '../models/difficulty_config.dart';
@@ -107,9 +108,10 @@ class _AdivinaGamePageState extends State<AdivinaGamePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Adivina el Número')),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(12.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
@@ -166,9 +168,11 @@ class _AdivinaGamePageState extends State<AdivinaGamePage> {
             const SizedBox(height: 12),
             Text(_message, style: const TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 12),
-            ElevatedButton(
-              onPressed: !_gameOver ? _submitGuess : null,
-              child: const Text('Adivinar'),
+            Center(
+              child: ElevatedButton(
+                onPressed: !_gameOver ? _submitGuess : null,
+                child: const Text('Adivinar'),
+              ),
             ),
             const SizedBox(height: 12),
             Text(_currentLevelName, style: const TextStyle(fontSize: 16)),
@@ -185,18 +189,20 @@ class _AdivinaGamePageState extends State<AdivinaGamePage> {
               },
             ),
             const SizedBox(height: 8),
-            ElevatedButton.icon(
-              onPressed: () async {
-                await HistoryService.clearHistory();
-                setState(() {
-                  _history.clear();
-                });
-              },
-              icon: const Icon(Icons.delete),
-              label: const Text("Borrar historial"),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.redAccent,
-                foregroundColor: Colors.white,
+            Center(
+              child: ElevatedButton.icon(
+                onPressed: () async {
+                  await HistoryService.clearHistory();
+                  setState(() {
+                    _history.clear();
+                  });
+                },
+                icon: const Icon(Icons.delete),
+                label: const Text("Borrar historial"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.redAccent,
+                  foregroundColor: Colors.white,
+                ),
               ),
             ),
           ],
