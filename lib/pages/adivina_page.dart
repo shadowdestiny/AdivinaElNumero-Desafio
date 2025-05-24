@@ -148,6 +148,7 @@ class _AdivinaGamePageState extends State<AdivinaGamePage> {
                 ),
                 ColumnBox(
                   title: "Historial",
+                  scrollToBottom: true,
                   children: _history.map((entry) {
                     return Text(
                       '${entry['value']}',
