@@ -142,10 +142,12 @@ class _AdivinaGamePageState extends State<AdivinaGamePage> {
               children: [
                 ColumnBox(
                   title: "Mayor que",
+                  scrollToBottom: true,
                   children: _greaterThan.map((e) => Text('$e')).toList(),
                 ),
                 ColumnBox(
                   title: "Menor que",
+                  scrollToBottom: true,
                   children: _lessThan.map((e) => Text('$e')).toList(),
                 ),
                 ColumnBox(

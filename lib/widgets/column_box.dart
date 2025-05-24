@@ -1,8 +1,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Widget reutilizable para mostrar listas numeradas dentro de una caja con scroll.
-/// El scroll se alinea a la derecha y permite inicializar anclado al fondo si se desea.
 class ColumnBox extends StatefulWidget {
   final String title;
   final List<Widget> children;
@@ -49,15 +47,22 @@ class _ColumnBoxState extends State<ColumnBox> {
             const SizedBox(height: 4),
             SizedBox(
               height: 120,
-              child: Scrollbar(
+              width: double.infinity,
+              child: RawScrollbar(
                 controller: _controller,
                 thumbVisibility: true,
-                child: SingleChildScrollView(
-                  controller: _controller,
-                  scrollDirection: Axis.vertical,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: widget.children,
+                trackVisibility: true,
+                thickness: 6,
+                radius: const Radius.circular(8),
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 4),
+                  child: SingleChildScrollView(
+                    controller: _controller,
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: widget.children,
+                    ),
                   ),
                 ),
               ),
