@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import '../models/difficulty_config.dart';
 import '../widgets/column_box.dart';
+import '../services/history_service.dart';
 
 class AdivinaGamePage extends StatefulWidget {
   const AdivinaGamePage({super.key});
@@ -29,7 +30,21 @@ class _AdivinaGamePageState extends State<AdivinaGamePage> {
   @override
   void initState() {
     super.initState();
+    _loadHistory();
     _resetGame();
+  }
+
+  /// Carga historial desde SharedPreferences
+  void _loadHistory() async {
+    final saved = await HistoryService.loadHistory();
+    setState(() {
+      _history.addAll(saved);
+    });
+  }
+
+  /// Guarda historial en SharedPreferences
+  void _saveHistory() {
+    HistoryService.saveHistory(_history);
   }
 
   void _resetGame() {
@@ -39,7 +54,6 @@ class _AdivinaGamePageState extends State<AdivinaGamePage> {
     _secretNumber = Random().nextInt(_max) + 1;
     _greaterThan.clear();
     _lessThan.clear();
-    _history.clear();
     _controller.clear();
     _message = '';
     _gameOver = false;
@@ -59,6 +73,7 @@ class _AdivinaGamePageState extends State<AdivinaGamePage> {
       if (input == _secretNumber) {
         _message = '¡Correcto! El número era $_secretNumber';
         _history.add({'value': input, 'success': true});
+        _saveHistory();
         _gameOver = true;
       } else {
         _history.add({'value': input, 'success': false});
@@ -76,6 +91,8 @@ class _AdivinaGamePageState extends State<AdivinaGamePage> {
               ? 'Muy alto. Intenta de nuevo.'
               : 'Muy bajo. Intenta de nuevo.';
         }
+
+        _saveHistory();
       }
 
       _controller.clear();
