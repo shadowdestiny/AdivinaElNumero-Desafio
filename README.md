@@ -1,16 +1,76 @@
-# agnostiko_adivina_numero
 
-Adivina el numero correcto
+# Adivina el Número – Flutter Challenge
 
-## Getting Started
+Este es un proyecto realizado como parte de una prueba técnica para la empresa AGNOSTIKO. Se trata de un juego interactivo donde el usuario debe adivinar un número secreto dentro de un rango determinado, ajustado por niveles de dificultad.
 
-This project is a starting point for a Flutter application.
+## 🚀 Tecnologías usadas
 
-A few resources to get you started if this is your first Flutter project:
+- **Lenguaje:** Dart
+- **Framework:** Flutter
+- **Arquitectura:** Modular simple con separación por responsabilidades (`pages/`, `widgets/`, `models/`)
+- **Compatibilidad:** Android, Web, Windows (opcional)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## 🧠 Funcionalidades del juego
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Cuatro niveles de dificultad:
+    - Fácil: 1–10 (5 intentos)
+    - Medio: 1–20 (8 intentos)
+    - Difícil: 1–100 (15 intentos)
+    - Extremo: 1–1000 (25 intentos)
+- Validación de entradas
+- Historial de intentos con colores:
+    - Verde: acierto
+    - Rojo: error
+- Visualización de:
+    - Números "mayores que" el secreto
+    - Números "menores que" el secreto
+- Reinicio automático al cambiar de dificultad
+- UI limpia, responsiva y scrollable
+
+## 📁 Estructura del proyecto
+
+```
+lib/
+├── main.dart                    # Punto de entrada limpio
+├── pages/
+│   └── adivina_page.dart        # Lógica principal y vista del juego
+├── widgets/
+│   └── column_box.dart          # Widget reutilizable para columnas scrollables
+└── models/
+    └── difficulty_config.dart   # Configuración de niveles de dificultad
+```
+
+## 🛠️ Cómo ejecutar
+
+1. Clona el repositorio:
+```bash
+git clone https://github.com/{todavia no lo he definido :)}/adivina-numero.git
+cd adivina-numero
+```
+
+2. Instala las dependencias:
+```bash
+flutter pub get
+```
+
+3. Corre el proyecto:
+```bash
+flutter run
+```
+
+Puedes correrlo en Android, web o escritorio.
+
+## 📦 Buenas prácticas aplicadas
+
+- Separación de responsabilidades (principio SOLID)
+- Código documentado y legible
+- Componentización de widgets
+- Validaciones amigables y claras
+- Comentarios para facilitar comprensión
+
+## 🔚 Entrega
+
+El repositorio fue organizado para facilitar la revisión del código, incluyendo estructura modular, commit limpios, y compatibilidad multiplataforma.
+
+---
+_Desarrollado por Luis Marin para AGNOSTIKO_
