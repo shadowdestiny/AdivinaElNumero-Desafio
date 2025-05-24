@@ -1,4 +1,3 @@
-
 import 'dart:math';
 import 'package:flutter/material.dart';
 import '../models/difficulty_config.dart';
@@ -34,7 +33,6 @@ class _AdivinaGamePageState extends State<AdivinaGamePage> {
     _resetGame();
   }
 
-  /// Carga historial desde SharedPreferences
   void _loadHistory() async {
     final saved = await HistoryService.loadHistory();
     setState(() {
@@ -42,7 +40,6 @@ class _AdivinaGamePageState extends State<AdivinaGamePage> {
     });
   }
 
-  /// Guarda historial en SharedPreferences
   void _saveHistory() {
     HistoryService.saveHistory(_history);
   }
@@ -68,28 +65,34 @@ class _AdivinaGamePageState extends State<AdivinaGamePage> {
     }
 
     setState(() {
-      _remainingTries--;
+      if (_gameOver) return;
 
       if (input == _secretNumber) {
         _message = '¡Correcto! El número era $_secretNumber';
         _history.add({'value': input, 'success': true});
         _saveHistory();
         _gameOver = true;
+        // reiniciar automáticamente luego de un pequeño retraso
+        Future.delayed(const Duration(seconds: 2), () => _resetGame());
       } else {
-        _history.add({'value': input, 'success': false});
         if (input > _secretNumber) {
           _greaterThan.add(input);
         } else {
           _lessThan.add(input);
         }
 
+        _history.add({'value': input, 'success': false});
+        _remainingTries--;
+
         if (_remainingTries == 0) {
           _message = '¡Sin intentos! El número era $_secretNumber';
           _gameOver = true;
+          _saveHistory();
+          Future.delayed(const Duration(seconds: 2), () => _resetGame());
         } else {
           _message = input > _secretNumber
-              ? 'Muy alto. Intenta de nuevo.'
-              : 'Muy bajo. Intenta de nuevo.';
+              ? 'Demasiado alto. Intenta de nuevo.'
+              : 'Demasiado bajo. Intenta de nuevo.';
         }
 
         _saveHistory();
@@ -99,7 +102,8 @@ class _AdivinaGamePageState extends State<AdivinaGamePage> {
     });
   }
 
-  String get _currentLevelName => difficultyLevels[_sliderValue.toInt()]!['name'];
+  String get _currentLevelName =>
+      difficultyLevels[_sliderValue.toInt()]!['name'];
 
   @override
   Widget build(BuildContext context) {
@@ -116,6 +120,8 @@ class _AdivinaGamePageState extends State<AdivinaGamePage> {
                     controller: _controller,
                     enabled: !_gameOver,
                     keyboardType: TextInputType.number,
+                    textInputAction: TextInputAction.done,
+                    onSubmitted: (_) => _submitGuess(),
                     textAlign: TextAlign.center,
                     decoration: InputDecoration(
                       labelText: 'Número (1 - $_max)',
@@ -125,10 +131,7 @@ class _AdivinaGamePageState extends State<AdivinaGamePage> {
                 ),
                 const SizedBox(width: 16),
                 Column(
-                  children: [
-                    const Text("Intentos"),
-                    Text('$_remainingTries'),
-                  ],
+                  children: [const Text("Intentos"), Text('$_remainingTries')],
                 ),
               ],
             ),
@@ -160,8 +163,8 @@ class _AdivinaGamePageState extends State<AdivinaGamePage> {
             Text(_message, style: const TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 12),
             ElevatedButton(
-              onPressed: !_gameOver ? _submitGuess : _resetGame,
-              child: Text(!_gameOver ? 'Adivinar' : 'Reiniciar'),
+              onPressed: !_gameOver ? _submitGuess : null,
+              child: const Text('Adivinar'),
             ),
             const SizedBox(height: 12),
             Text(_currentLevelName, style: const TextStyle(fontSize: 16)),
